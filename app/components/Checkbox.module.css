@@ -1,0 +1,27 @@
+.checkbox {
+    cursor: pointer;
+    line-height: 1.5;
+    display: flex;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+    margin: 3px 8px 3px 0;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: transparent;
+    transition: all 0.2s;
+    align-self: flex-start;
+}
+
+.iconActive {
+    border-color: var(--primary);
+    background-color: var(--primary);
+    color: white;
+}
+
+.check {
+    width: 16px;
+    height: 16px;
+}

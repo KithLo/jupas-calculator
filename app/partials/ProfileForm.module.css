@@ -1,0 +1,34 @@
+.subjects {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr) 60px auto;
+    gap: 4px 12px;
+    margin: 8px 0;
+}
+
+.deleteRow {
+    color: var(--error);
+    padding: 8px 4px;
+    align-self: center;
+    cursor: pointer;
+}
+
+.buttons {
+    margin: 8px 0;
+    display: flex;
+    gap: 12px;
+}
+
+.space {
+    flex: 1 1 0;
+}
+
+.button {
+    flex: none;
+    width: auto;
+}
+
+.deleteModal {
+    height: 100px;
+    display: grid;
+    place-items: center;
+}

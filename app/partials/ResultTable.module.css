@@ -1,0 +1,50 @@
+.table {
+    line-height: 1.5;
+    width: 100%;
+    table-layout: fixed;
+    background-color: rgba(160, 160, 160, 0.1);
+}
+
+.thead {
+    position: sticky;
+    top: 0;
+    background-color: var(--header);
+}
+
+.tfoot {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--header);
+}
+
+.row:nth-child(even) {
+    background-color: rgba(160, 160, 160, 0.08);
+}
+
+.row:hover {
+    background-color: rgba(160, 160, 160, 0.2);
+}
+
+.cell {
+    padding: 4px 8px;
+    border-bottom: 1px solid rgba(160, 160, 160, 0.4);
+}
+
+.code:hover {
+    color: var(--primary-light);
+    text-decoration: underline;
+}
+
+.passFailIcon {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 24px;
+}
+
+.passIcon {
+    color: var(--success);
+}
+
+.failIcon {
+    color: var(--error);
+}

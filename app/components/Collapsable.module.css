@@ -1,0 +1,21 @@
+.collapsable {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows 0.2s;
+}
+
+.collapsableExpanded {
+    grid-template-rows: 1fr;
+}
+
+.collapsableContent {
+    align-self: start;
+    min-height: 0;
+    transition: visibility 0.2s;
+    visibility: hidden;
+}
+
+.collapsableExpanded .collapsableContent {
+    visibility: visible;
+}

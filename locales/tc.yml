@@ -1,0 +1,24 @@
+UI:
+  Title: 聯招計算機
+  Profiles: 檔案：
+  AddSubjectButton: 新增科目
+  SaveButton: 儲存
+  DeleteButton: 刪除
+  ResetButton: 重設
+  ConfirmButton: 確定
+  TableCode: 編號
+  TableName: 名稱
+  TableInstitution: 院校
+  TablePass: 合格
+  TableScore: 分數
+  TableUQ: UQ
+  TableM: M
+  TableLQ: LQ
+  AllStudyAreas: 所有學習範疇
+  StudyAreasSelected: "已選 {} 學習範疇"
+  PageSize: 每頁顯示：
+  PassFilter: 僅顯示符合條件的課程
+  FilterSelect: 選取
+  FilterUQ: Upper Quartile
+  FilterM: Median / Mean
+  FilterLQ: Lower Quartile

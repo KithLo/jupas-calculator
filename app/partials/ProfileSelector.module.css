@@ -1,0 +1,53 @@
+.profiles {
+    display: flex;
+    gap: 12px;
+    padding: 2px;
+    align-items: center;
+    scrollbar-width: none;
+}
+
+.profiles::-webkit-scrollbar {
+    display: none;
+}
+
+.profile {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    user-select: none;
+    background-color: rgba(160, 160, 160, 0.6);
+}
+
+.profileActive {
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+}
+
+.profile:hover .profileIndex:not(:only-child) {
+    display: none;
+}
+
+.profile:not(:hover) .profileEditIcon {
+    display: none;
+}
+
+.space {
+    flex: 1 1 0;
+}
+
+.expand {
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.expanded {
+    transform: rotate(180deg);
+}

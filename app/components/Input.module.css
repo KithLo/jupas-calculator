@@ -1,0 +1,22 @@
+.input {
+    line-height: 22px;
+    padding: 4px 11px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background-color: rgba(160, 160, 160, 0.1);
+    transition: border 0.3s;
+}
+
+.input:focus {
+    border-color: var(--primary);
+}
+
+.error,
+.error:focus {
+    color: var(--error);
+    border-color: var(--error);
+}
+
+.disabled {
+    cursor: not-allowed;
+}

@@ -1,0 +1,21 @@
+.header {
+    line-height: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: bold;
+    flex: 1 1 0;
+}
+
+.icon {
+    display: block;
+    padding: 8px;
+    line-height: 1;
+    font-size: 24px;
+    cursor: pointer;
+}

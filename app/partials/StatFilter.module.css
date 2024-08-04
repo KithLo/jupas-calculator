@@ -1,0 +1,54 @@
+.slider {
+    position: relative;
+    height: 8px;
+    margin: 26px 10px;
+    width: 300px;
+    background-image: linear-gradient(
+        in hsl increasing hue 270deg,
+        var(--fail) 0%,
+        var(--pass) 100%
+    );
+    touch-action: pan-y;
+    border-radius: 9999px;
+}
+
+.thumb {
+    border: 2px solid var(--text);
+    position: absolute;
+    margin: -6px 0 0 -5px;
+    width: 10px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.track {
+    height: 100%;
+    position: absolute;
+    background-color: var(--header);
+    border-radius: 9999px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    height: 20px;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.range {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.compare {
+    font-size: 14px;
+}

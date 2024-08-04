@@ -1,0 +1,22 @@
+.headerCell {
+    padding: 4px 8px;
+}
+
+.headerSortable {
+    cursor: pointer;
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+}
+
+.headerText {
+    flex: 1 1 0;
+}
+
+.headerIcon {
+    cursor: pointer;
+    display: block;
+    margin: 4px;
+}

@@ -1,0 +1,42 @@
+.pagination {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.space {
+    flex: 1 1 0;
+}
+
+.pageSize {
+    margin-right: 8px;
+    width: 60px;
+}
+
+.paginationButton {
+    padding: 0 4px;
+    width: auto;
+    cursor: pointer;
+}
+
+.paginationButton:disabled {
+    color: rgba(160, 160, 160, 0.8);
+}
+
+.paginationInput {
+    width: 60px;
+}
+
+.studyAreas {
+    cursor: pointer;
+    line-height: 22px;
+    padding: 4px 11px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background-color: rgba(160, 160, 160, 0.1);
+    transition: border 0.3s;
+}
+
+.studyAreasActive {
+    border-color: var(--primary);
+}

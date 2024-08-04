@@ -1,0 +1,24 @@
+UI:
+  Title: Jupas Calculator
+  Profiles: "Profiles:"
+  AddSubjectButton: Add subject
+  SaveButton: Save
+  DeleteButton: Delete
+  ResetButton: Reset
+  ConfirmButton: Confirm
+  TableCode: Code
+  TableName: Name
+  TableInstitution: Inst.
+  TablePass: Pass
+  TableScore: Score
+  TableUQ: UQ
+  TableM: M
+  TableLQ: LQ
+  AllStudyAreas: All study areas
+  StudyAreasSelected: "{} study areas selected"
+  PageSize: "Page size:"
+  PassFilter: Show only eligible programmes
+  FilterSelect: Select
+  FilterUQ: Upper Quartile
+  FilterM: Median / Mean
+  FilterLQ: Lower Quartile

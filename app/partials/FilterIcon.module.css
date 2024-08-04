@@ -1,0 +1,9 @@
+.headerIcon {
+    cursor: pointer;
+    display: block;
+    margin: 4px;
+}
+
+.headerIconActive {
+    color: var(--primary-light);
+}

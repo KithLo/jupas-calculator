@@ -270,7 +270,9 @@ export const ResultTable: Component = () => {
                     (programme): ResultRawRow => ({
                         ...programme,
                         institution,
-                        maxScore: evaluate(programme.weighting(maxGrade)),
+                        maxScore: evaluate(
+                            programme.weighting(programme.mapGrades(maxGrade)),
+                        ),
                     }),
                 ),
         )
@@ -290,19 +292,11 @@ export const ResultTable: Component = () => {
 
     const { activeProfile } = useProfiles()
 
-    const activeGrade = createMemo(() => {
-        const profile = activeProfile()
-        const map = data().gradeMap
-        return mapObjIndexed(
-            (grade, subject) => map[subject]![grade]!,
-            profile.subjects,
-        )
-    })
-
     const scoredRows = createMemo(() => {
-        const grade = activeGrade()
+        const subjects = activeProfile().subjects
         const output: Record<string, ResultScoredRow> = {}
         for (const row of rawRows()) {
+            const grade = row.mapGrades(subjects)
             const pass = row.requirement(grade)
             const scores = pass ? row.weighting(grade) : null
             const score = evaluate(scores)

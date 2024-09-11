@@ -3,11 +3,12 @@ declare global {
         darkMode: boolean
     }
 
+    type SubjectGrades = Record<string, string>
     type SubjectScores = Record<string, number>
 
     type Grade = {
         subjects: string[]
-        grades: Record<string, number>
+        grades: string[]
     }
 
     interface Data {
@@ -23,9 +24,8 @@ declare global {
         grades: Grade[]
         year: string
         pastYears: string[]
-        maxGrade: SubjectScores
+        maxGrade: SubjectGrades
         gradeMap: Record<string, Grade["grades"]>
-        gradeListMap: Record<string, string[]>
         categoryMap: Record<string, string>
         institutionMap: Record<string, string>
     }
@@ -34,6 +34,7 @@ declare global {
 
     interface Programme {
         id: string
+        mapGrades: (grades: SubjectGrades) => SubjectScores
         requirement: Calculation
         weighting: Calculation
         studyAreas: string[]

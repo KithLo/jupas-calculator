@@ -29,13 +29,9 @@ async function loadData(year: string): Promise<Data> {
         latestYear = data.year
     }
     const gradeMap: Record<string, Grade["grades"]> = {}
-    const gradeListMap: Record<string, string[]> = {}
     for (const { grades, subjects } of data.grades) {
-        const list = Object.keys(grades)
-        list.sort((a, b) => grades[b]! - grades[a]!)
         for (const subject of subjects) {
             gradeMap[subject] = grades
-            gradeListMap[subject] = list
         }
     }
     const institutionMap: Record<string, string> = {}
@@ -54,7 +50,7 @@ async function loadData(year: string): Promise<Data> {
             categoryMap[subject] = key
         }
     }
-    return { ...data, gradeMap, gradeListMap, categoryMap, institutionMap }
+    return { ...data, gradeMap, categoryMap, institutionMap }
 }
 
 async function loadLocale(year: string, lang: string): Promise<Locale> {

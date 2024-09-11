@@ -82,7 +82,7 @@ export const ProfileForm: Component = () => {
 
     const subjectLists = createMemo(() => data().subjectsByCategory)
     const categoryMap = createMemo(() => data().categoryMap)
-    const gradeListMap = createMemo(() => data().gradeListMap)
+    const gradeMap = createMemo(() => data().gradeMap)
 
     const getErrors = (subjects: SubjectRow[]) => {
         const output: RowErrors[] = Array.from({
@@ -123,7 +123,7 @@ export const ProfileForm: Component = () => {
                 subject,
                 subjectList: subjectLists()[category]!,
                 grade,
-                gradeList: gradeListMap()[subject]!,
+                gradeList: gradeMap()[subject]!,
             }
         })
     }
@@ -164,7 +164,7 @@ export const ProfileForm: Component = () => {
         if (!category || row.category !== category) {
             return row
         }
-        const gradeList = gradeListMap()[subject]!
+        const gradeList = gradeMap()[subject]!
         if (gradeList !== row.gradeList) {
             return {
                 ...row,
@@ -184,7 +184,7 @@ export const ProfileForm: Component = () => {
             subject,
             subjectList: subjectLists()[category]!,
             grade: "",
-            gradeList: gradeListMap()[subject]!,
+            gradeList: gradeMap()[subject]!,
         }
     }
 
@@ -199,7 +199,7 @@ export const ProfileForm: Component = () => {
                     subject,
                     subjectList: subjectLists()[category]!,
                     grade: "",
-                    gradeList: gradeListMap()[subject]!,
+                    gradeList: gradeMap()[subject]!,
                 },
             ]
         })

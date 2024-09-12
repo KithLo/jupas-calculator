@@ -61,11 +61,17 @@ async function loadLocale(year: string, lang: string): Promise<Locale> {
     return output
 }
 
-const DataContext = createContext<Accessor<Data>>(
+const ThisYearDataContext = createContext<Accessor<Data>>(
     () => undefined as unknown as Data,
 )
 
-export const useData = () => useContext(DataContext)
+export const useThisYearData = () => useContext(ThisYearDataContext)
+
+const LastYearDataContext = createContext<Accessor<Data | undefined>>(
+    () => undefined,
+)
+
+export const useLastYearData = () => useContext(LastYearDataContext)
 
 const LocaleContext = createContext<Accessor<Locale>>(
     () => undefined as unknown as Locale,
@@ -77,33 +83,55 @@ export const DataProvider: ParentComponent = (props) => {
     const navigate = useNavigate()
     const location = useLocation()
     const params = usePathParams()
-    const [data] = createResource(() => params.year, loadData)
+    const [thisYearData] = createResource(() => params.year, loadData)
+    const [lastYearData] = createResource(
+        () => {
+            const data = thisYearData()
+            return data && !data.hasStats ? data.lastYear : null
+        },
+        async (year) => {
+            const result = await loadData(year)
+            if (!result.hasStats) return undefined
+            return result
+        },
+    )
     const [locale] = createResource(
         () => [params.year, params.lang] as const,
         ([year, lang]) =>
-            year === "latest" ? undefined! : loadLocale(year, lang),
+            import.meta.env.PROD && year === "latest"
+                ? undefined!
+                : loadLocale(year, lang),
     )
 
     createRenderEffect(() => {
-        if (data.state === "ready" && params.year === "latest") {
-            navigate(`/${params.lang}/${data().year}${location.search}`, {
-                replace: true,
-            })
+        if (
+            import.meta.env.PROD &&
+            thisYearData.state === "ready" &&
+            params.year === "latest"
+        ) {
+            navigate(
+                `/${params.lang}/${thisYearData().year}${location.search}`,
+                { replace: true },
+            )
         }
     })
 
     return (
-        <Show when={data()}>
+        <Show when={thisYearData()}>
             {(_data) => (
-                <DataContext.Provider value={_data}>
+                <ThisYearDataContext.Provider value={_data}>
                     <Show when={locale()}>
                         {(_locale) => (
                             <LocaleContext.Provider value={_locale}>
-                                {props.children}
+                                <LastYearDataContext.Provider
+                                    value={lastYearData}
+                                >
+                                    {props.children}
+                                </LastYearDataContext.Provider>
                             </LocaleContext.Provider>
                         )}
                     </Show>
-                </DataContext.Provider>
+                </ThisYearDataContext.Provider>
             )}
         </Show>
     )

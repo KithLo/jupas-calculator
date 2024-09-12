@@ -2,7 +2,7 @@ import { A, useLocation } from "@solidjs/router"
 import { not } from "rambda"
 import { IoContrast, IoLanguage, IoLogoGithub } from "solid-icons/io"
 import { Component, createMemo } from "solid-js"
-import { useData, useLocale } from "../data"
+import { useThisYearData, useLocale } from "../data"
 import { useSettings } from "../settings"
 import { usePathParams } from "../util"
 import styles from "./Header.module.css"
@@ -11,7 +11,7 @@ export const Header: Component = () => {
     const [, setSettings] = useSettings()
     const params = usePathParams()
     const location = useLocation()
-    const data = useData()
+    const data = useThisYearData()
     const locale = useLocale()
 
     const otherLangHref = createMemo(() => {

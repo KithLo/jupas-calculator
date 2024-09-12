@@ -4,7 +4,7 @@ import { createStore } from "solid-js/store"
 import { Button } from "../components/Button"
 import { Checkbox } from "../components/Checkbox"
 import { Input } from "../components/Input"
-import { useData, useLocale } from "../data"
+import { useThisYearData, useLocale } from "../data"
 import { useTableColumn } from "../table"
 import { Filter } from "./Filter"
 import { FilterIcon } from "./FilterIcon"
@@ -18,7 +18,7 @@ export function ListFilter(props: {
     getLabel?: (key: string, locale: Locale, data: Data) => string
     children?: JSX.Element
 }): JSX.Element {
-    const data = useData()
+    const data = useThisYearData()
     const locale = useLocale()
 
     const [focus, setFocus] = createSignal(false)

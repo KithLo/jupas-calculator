@@ -22,10 +22,10 @@ import {
     toUint8Array as decodeBase64,
 } from "js-base64"
 import { pack, unpack } from "msgpackr"
-import { mapObjIndexed, mergeDeepLeft, sum, values } from "rambda"
+import { indexBy, mapObjIndexed, mergeDeepLeft, sum, values } from "rambda"
 import { IoCheckmarkCircle, IoCloseCircle } from "solid-icons/io"
-import { createMemo, For, Component, createRenderEffect } from "solid-js"
-import { useData, useLocale } from "../data"
+import { createMemo, For, Component, createRenderEffect, Show } from "solid-js"
+import { useThisYearData, useLocale, useLastYearData } from "../data"
 import { useProfiles } from "../profile"
 import { ListFilter } from "./ListFilter"
 import { Pagination } from "./Pagination"
@@ -163,23 +163,37 @@ const columnDefs: ColumnDef<ResultRow>[] = [
             ),
     },
     {
-        header: () => <ResultTableHeaderCell labelKey="TableScore" />,
-        accessorKey: "score",
-        size: 60,
+        header: () => (
+            <ResultTableHeaderCell labelKey="TableScore" withLastYear />
+        ),
+        id: "score",
         enableSorting: false,
         enableColumnFilter: false,
         cell: (data) => (
-            <ScoreValue
-                code={data.row.original.id}
-                scores={data.row.original.scores}
-            >
-                {data.renderValue() as any}
-            </ScoreValue>
+            <>
+                <ScoreValue
+                    code={data.row.original.id}
+                    scores={data.row.original.scores}
+                >
+                    {data.row.original.score}
+                </ScoreValue>
+                <Show when={data.row.original.lastYearScore}>
+                    {" ("}
+                    <ScoreValue
+                        code={data.row.original.id}
+                        scores={data.row.original.scores}
+                        withLastYear
+                    >
+                        {data.row.original.lastYearScore}
+                    </ScoreValue>
+                    {")"}
+                </Show>
+            </>
         ),
     },
     {
         header: () => (
-            <ResultTableHeaderCell labelKey="TableUQ">
+            <ResultTableHeaderCell labelKey="TableUQ" withLastYear>
                 <StatFilter titleKey="FilterUQ" />
             </ResultTableHeaderCell>
         ),
@@ -193,7 +207,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
     },
     {
         header: () => (
-            <ResultTableHeaderCell labelKey="TableM">
+            <ResultTableHeaderCell labelKey="TableM" withLastYear>
                 <StatFilter titleKey="FilterM" />
             </ResultTableHeaderCell>
         ),
@@ -207,7 +221,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
     },
     {
         header: () => (
-            <ResultTableHeaderCell labelKey="TableLQ">
+            <ResultTableHeaderCell labelKey="TableLQ" withLastYear>
                 <StatFilter titleKey="FilterLQ" />
             </ResultTableHeaderCell>
         ),
@@ -226,7 +240,8 @@ const columnDefs: ColumnDef<ResultRow>[] = [
 ]
 
 export const ResultTable: Component = () => {
-    const data = useData()
+    const data = useThisYearData()
+    const lastYearData = useLastYearData()
     const locale = useLocale()
 
     const [searchParams, setSearchParams] = useSearchParams<{
@@ -278,6 +293,25 @@ export const ResultTable: Component = () => {
         )
     })
 
+    const lastYearProgrammes = createMemo(() => {
+        const data = lastYearData()
+        if (!data) return null
+        const maxGrade = data.maxGrade
+        return mapObjIndexed(
+            (list) =>
+                indexBy(
+                    (programme) => programme.id,
+                    list.map((programme) => ({
+                        ...programme,
+                        maxScore: evaluate(
+                            programme.weighting(programme.mapGrades(maxGrade)),
+                        ),
+                    })),
+                ),
+            data.programmes,
+        )
+    })
+
     const namedRows = createMemo(() => {
         const output: Record<string, ResultNamedRow> = {}
         for (const row of rawRows()) {
@@ -295,24 +329,43 @@ export const ResultTable: Component = () => {
     const scoredRows = createMemo(() => {
         const subjects = activeProfile().subjects
         const output: Record<string, ResultScoredRow> = {}
+        const lastYearProgrammeMap = lastYearProgrammes()
         for (const row of rawRows()) {
             const grade = row.mapGrades(subjects)
             const pass = row.requirement(grade)
             const scores = pass ? row.weighting(grade) : null
             const score = evaluate(scores)
-            output[row.id] = {
+            const result: ResultScoredRow = {
                 pass: !!pass && !!scores,
                 score: (score && round(score)) || undefined,
                 scores: scores || undefined,
-                deltas:
-                    score && row.maxScore
-                        ? mapObjIndexed(
-                              (v) => ((v - score) / row.maxScore!) * 100,
-                              row.statistics,
-                          )
-                        : {},
+                deltas: {},
             }
+            const lastYearProgramme =
+                lastYearProgrammeMap?.[row.institution]?.[row.id]
+            if (lastYearProgramme) {
+                const grade = lastYearProgramme.mapGrades(subjects)
+                const pass = lastYearProgramme.requirement(grade)
+                const scores = pass ? lastYearProgramme.weighting(grade) : null
+                const score = evaluate(scores)
+                result.lastYearScore = (score && round(score)) || undefined
+                result.lastYearScores = scores || undefined
+                if (score && lastYearProgramme.maxScore) {
+                    result.deltas = mapObjIndexed(
+                        (v) =>
+                            ((v - score) / lastYearProgramme.maxScore!) * 100,
+                        lastYearProgramme.statistics,
+                    )
+                }
+            } else if (score && row.maxScore) {
+                result.deltas = mapObjIndexed(
+                    (v) => ((v - score) / row.maxScore!) * 100,
+                    row.statistics,
+                )
+            }
+            output[row.id] = result
         }
+        console.log(output)
         return output
     })
 
@@ -394,6 +447,23 @@ export const ResultTable: Component = () => {
         // debugTable: import.meta.env.DEV,
         // debugHeaders: import.meta.env.DEV,
         // debugColumns: import.meta.env.DEV,
+    })
+
+    createRenderEffect(() => {
+        table.setColumnSizing((state) => ({
+            ...state,
+            score: lastYearData() ? 110 : 60,
+        }))
+    })
+
+    createRenderEffect(() => {
+        const hasStats = !!data().hasStats || !!lastYearData()
+        table.setColumnVisibility((state) => ({
+            ...state,
+            UQ: hasStats,
+            M: hasStats,
+            LQ: hasStats,
+        }))
     })
 
     createRenderEffect(() => {

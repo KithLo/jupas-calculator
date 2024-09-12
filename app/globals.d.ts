@@ -23,7 +23,8 @@ declare global {
         programmes: Record<string, Programme[]>
         grades: Grade[]
         year: string
-        pastYears: string[]
+        lastYear: string | null
+        hasStats: boolean
         maxGrade: SubjectGrades
         gradeMap: Record<string, Grade["grades"]>
         categoryMap: Record<string, string>
@@ -74,6 +75,8 @@ declare global {
         pass: boolean
         score?: string
         scores?: Record<string, number>
+        lastYearScore?: string
+        lastYearScores?: Record<string, number>
         deltas: {
             UQ?: number
             M?: number

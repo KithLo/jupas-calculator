@@ -1,17 +1,19 @@
 import { IoArrowForward } from "solid-icons/io"
 import { createMemo, For, ParentComponent, Show } from "solid-js"
 import { Tooltip } from "../components/Tooltip"
-import { useLocale } from "../data"
+import { useLastYearData, useLocale } from "../data"
 import { useProfiles } from "../profile"
 import { round } from "../util"
 import styles from "./ScoreValue.module.css"
 
 const ScoreFormula: ParentComponent<{
     code: string
+    withLastYear?: boolean
     scores: SubjectScores
 }> = (props) => {
     const locale = useLocale()
     const { activeProfile } = useProfiles()
+    const lastYearData = useLastYearData()
     const rows = createMemo(() =>
         Object.entries(activeProfile().subjects)
             .filter(([subject]) => props.scores[subject])
@@ -23,7 +25,12 @@ const ScoreFormula: ParentComponent<{
     )
     return (
         <div class={styles.formula}>
-            <div class={styles.formulaCode}>{props.code}</div>
+            <div class={styles.formulaCode}>
+                {props.code}
+                {props.withLastYear && lastYearData()
+                    ? ` (${lastYearData()?.year})`
+                    : ""}
+            </div>
             <For each={rows()}>
                 {(item) => (
                     <>
@@ -43,6 +50,7 @@ const ScoreFormula: ParentComponent<{
 export const ScoreValue: ParentComponent<{
     code: string
     scores?: SubjectScores
+    withLastYear?: boolean
 }> = (props) => {
     return (
         <Show when={!!props.scores} fallback={props.children}>
@@ -51,6 +59,7 @@ export const ScoreValue: ParentComponent<{
                     <ScoreFormula
                         code={props.code}
                         scores={props.scores!}
+                        withLastYear={props.withLastYear}
                         children={props.children}
                     />
                 }

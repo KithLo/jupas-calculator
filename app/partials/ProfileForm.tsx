@@ -11,7 +11,7 @@ import { Button } from "../components/Button"
 import { Collapsable } from "../components/Collapsable"
 import { Modal } from "../components/Modal"
 import { Select } from "../components/Select"
-import { useData, useLocale } from "../data"
+import { useThisYearData, useLocale } from "../data"
 import { useProfiles } from "../profile"
 import { ProfileSelector } from "./ProfileSelector"
 import styles from "./ProfileForm.module.css"
@@ -75,7 +75,7 @@ const ProfileRow: Component<
 }
 
 export const ProfileForm: Component = () => {
-    const data = useData()
+    const data = useThisYearData()
     const locale = useLocale()
     const { activeProfile, updateProfile, deleteProfile } = useProfiles()
     const [isDeleting, setIsDeleting] = createSignal(false)

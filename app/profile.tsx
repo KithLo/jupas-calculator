@@ -10,7 +10,7 @@ import {
     Show,
 } from "solid-js"
 import { ulid } from "ulidx"
-import { useData } from "./data"
+import { useThisYearData } from "./data"
 
 const PREFIX = "profile_"
 const STORE_NAME = "profiles"
@@ -101,7 +101,7 @@ interface ProfileData {
 const Context = createContext<ProfileData>(undefined as unknown as ProfileData)
 
 export const ProfileProvider: ParentComponent = (props) => {
-    const data = useData()
+    const data = useThisYearData()
     const [search, setSearch] = useSearchParams<{ [profileIdKey]: string }>()
     const [profiles, { refetch }] = createResource(
         () => data().year,

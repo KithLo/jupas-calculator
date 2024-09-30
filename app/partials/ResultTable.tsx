@@ -203,6 +203,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
         cell: statCell,
         sortDescFirst: false,
         sortUndefined: "last",
+        filterFn: "inNumberRange",
     },
     {
         header: () => (
@@ -217,6 +218,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
         cell: statCell,
         sortDescFirst: false,
         sortUndefined: "last",
+        filterFn: "inNumberRange",
     },
     {
         header: () => (
@@ -230,6 +232,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
         cell: statCell,
         sortDescFirst: false,
         sortUndefined: "last",
+        filterFn: "inNumberRange",
     },
     {
         accessorKey: "studyAreas",

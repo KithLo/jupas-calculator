@@ -1,7 +1,7 @@
 import { IoArrowForward } from "solid-icons/io"
 import { createMemo, For, ParentComponent, Show } from "solid-js"
 import { Tooltip } from "../components/Tooltip"
-import { useLastYearData, useLocale } from "../data"
+import { useLastYearData, useLocale, useThisYearData } from "../data"
 import { useProfiles } from "../profile"
 import { round } from "../util"
 import styles from "./ScoreValue.module.css"
@@ -13,6 +13,7 @@ const ScoreFormula: ParentComponent<{
 }> = (props) => {
     const locale = useLocale()
     const { activeProfile } = useProfiles()
+    const data = useThisYearData()
     const lastYearData = useLastYearData()
     const rows = createMemo(() =>
         Object.entries(activeProfile().subjects)
@@ -26,10 +27,8 @@ const ScoreFormula: ParentComponent<{
     return (
         <div class={styles.formula}>
             <div class={styles.formulaCode}>
-                {props.code}
-                {props.withLastYear && lastYearData()
-                    ? ` (${lastYearData()?.year})`
-                    : ""}
+                {props.code} (
+                {(props.withLastYear && lastYearData()?.year) || data().year})
             </div>
             <For each={rows()}>
                 {(item) => (

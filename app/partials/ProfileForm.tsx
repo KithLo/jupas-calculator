@@ -48,23 +48,21 @@ const ProfileRow: Component<
                 value={props.category}
                 onChange={(v) => props.onChangeCategory(v)}
                 options={props.categoryList}
-                getLabel={(option) =>
-                    locale().SubjectCategory[option] || <br />
-                }
+                getLabel={(option) => locale().SubjectCategory[option]}
                 error={props.categoryError}
             />
             <Select
                 value={props.subject}
                 onChange={(v) => props.onChangeSubject(v)}
                 options={props.subjectList}
-                getLabel={(option) => locale().Subject[option] || <br />}
+                getLabel={(option) => locale().Subject[option]}
                 error={props.subjectError}
             />
             <Select
                 value={props.grade}
                 onChange={(v) => props.onChangeGrade(v)}
                 options={props.gradeList}
-                getLabel={(option) => option || <br />}
+                getLabel={(option) => option}
                 error={props.gradeError}
             />
             <div class={styles.deleteRow} onClick={() => props.onDelete()}>

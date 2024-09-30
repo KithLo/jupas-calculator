@@ -8,6 +8,14 @@
     transition: border 0.3s;
 }
 
+.nativeSelect {
+    appearance: none;
+    font: inherit;
+    color: inherit;
+    height: 32px;
+    outline: none;
+}
+
 .focus {
     border-color: var(--primary);
 }

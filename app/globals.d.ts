@@ -82,6 +82,7 @@ declare global {
             M?: number
             LQ?: number
         }
+        statistics: Programme["statistics"]
     }
 
     interface ResultRow extends ResultRawRow, ResultNamedRow, ResultScoredRow {}

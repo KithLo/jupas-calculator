@@ -27,6 +27,7 @@ import { IoCheckmarkCircle, IoCloseCircle } from "solid-icons/io"
 import { createMemo, For, Component, createRenderEffect, Show } from "solid-js"
 import { useThisYearData, useLocale, useLastYearData } from "../data"
 import { useProfiles } from "../profile"
+import { round } from "../util"
 import { ListFilter } from "./ListFilter"
 import { Pagination } from "./Pagination"
 import { PassFilter } from "./PassFilter"
@@ -38,6 +39,8 @@ import { ScoreValue } from "./ScoreValue"
 import { StatFilter } from "./StatFilter"
 import { StatValue } from "./StatValue"
 import styles from "./ResultTable.module.css"
+
+const fallbackCellValue = "-"
 
 interface TableState {
     pagination: PaginationState
@@ -60,10 +63,6 @@ function decode(encoded: string): TableState {
     return decoded
 }
 
-function round(num: number, precision: number = 1): string {
-    return num.toLocaleString(undefined, { maximumFractionDigits: precision })
-}
-
 const defaultState: TableState = {
     pagination: {
         pageIndex: 0,
@@ -83,7 +82,7 @@ const statCell = (data: CellContext<ResultRow, unknown>) => {
     const stat = statistics[key]
     const delta = deltas[key]
     if (stat === undefined) {
-        return data.renderValue()
+        return fallbackCellValue
     }
     return <StatValue stat={stat} delta={delta} />
 }
@@ -340,6 +339,7 @@ export const ResultTable: Component = () => {
                 score: (score && round(score)) || undefined,
                 scores: scores || undefined,
                 deltas: {},
+                statistics: row.statistics,
             }
             const lastYearProgramme =
                 lastYearProgrammeMap?.[row.institution]?.[row.id]
@@ -356,6 +356,7 @@ export const ResultTable: Component = () => {
                             ((v - score) / lastYearProgramme.maxScore!) * 100,
                         lastYearProgramme.statistics,
                     )
+                    result.statistics = lastYearProgramme.statistics
                 }
             } else if (score && row.maxScore) {
                 result.deltas = mapObjIndexed(
@@ -365,7 +366,6 @@ export const ResultTable: Component = () => {
             }
             output[row.id] = result
         }
-        console.log(output)
         return output
     })
 
@@ -387,7 +387,7 @@ export const ResultTable: Component = () => {
         },
         columns: columnDefs,
         getCoreRowModel: getCoreRowModel(),
-        renderFallbackValue: "-",
+        renderFallbackValue: fallbackCellValue,
 
         // filter
         getFilteredRowModel: getFilteredRowModel(),

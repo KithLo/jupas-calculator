@@ -457,12 +457,14 @@ export const ResultTable: Component = () => {
     })
 
     createRenderEffect(() => {
+        const statData = data().hasStats ? data() : lastYearData()
+        const programmes = Object.values(statData?.programmes || {}).flat()
         const hasStats = !!data().hasStats || !!lastYearData()
         table.setColumnVisibility((state) => ({
             ...state,
-            UQ: hasStats,
-            M: hasStats,
-            LQ: hasStats,
+            UQ: hasStats && programmes.some((p) => p.statistics.UQ),
+            M: hasStats && programmes.some((p) => p.statistics.M),
+            LQ: hasStats && programmes.some((p) => p.statistics.LQ),
         }))
     })
 

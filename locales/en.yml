@@ -4,6 +4,7 @@ UI:
   AddSubjectButton: Add subject
   SaveButton: Save
   DeleteButton: Delete
+  ConfirmDeleteButton: Confirm?
   ResetButton: Reset
   ConfirmButton: Confirm
   TableCode: Code

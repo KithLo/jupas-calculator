@@ -28,7 +28,12 @@
 }
 
 .deleteModal {
-    height: 100px;
-    display: grid;
-    place-items: center;
+    position: fixed;
+    border-radius: 8px;
+    background-color: var(--modal-background);
+    text-align: left;
+    padding: 4px 12px;
+    height: auto;
+    white-space: pre-wrap;
+    box-shadow: 2px 4px 6px hsl(0 0 0 / 0.38);
 }

@@ -4,6 +4,7 @@ UI:
   AddSubjectButton: 新增科目
   SaveButton: 儲存
   DeleteButton: 刪除
+  ConfirmDeleteButton: 確定?
   ResetButton: 重設
   ConfirmButton: 確定
   TableCode: 編號

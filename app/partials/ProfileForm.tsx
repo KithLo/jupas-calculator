@@ -9,10 +9,11 @@ import {
 import { createStore } from "solid-js/store"
 import { Button } from "../components/Button"
 import { Collapsable } from "../components/Collapsable"
-import { Modal } from "../components/Modal"
+import { Popup } from "../components/Popup"
 import { Select } from "../components/Select"
 import { useThisYearData, useLocale } from "../data"
 import { useProfiles } from "../profile"
+import { useClickAway, usePopup } from "../util"
 import { ProfileSelector } from "./ProfileSelector"
 import styles from "./ProfileForm.module.css"
 
@@ -221,6 +222,21 @@ export const ProfileForm: Component = () => {
         deleteProfile(editing.id)
     }
 
+    let deleteButton: HTMLDivElement
+    let confirmDeleteButton: HTMLDivElement
+
+    usePopup(
+        () => deleteButton!,
+        () => confirmDeleteButton!,
+        isDeleting,
+        { placement: "top" },
+    )
+
+    useClickAway(
+        () => [deleteButton!, confirmDeleteButton!],
+        () => setIsDeleting(false),
+    )
+
     return (
         <>
             <ProfileSelector
@@ -264,13 +280,29 @@ export const ProfileForm: Component = () => {
                         {locale().UI.AddSubjectButton}
                     </Button>
                     <div class={styles.space} />
-                    <Button
-                        theme="error"
-                        class={styles.button}
-                        onClick={() => setIsDeleting(true)}
-                    >
-                        {locale().UI.DeleteButton}
-                    </Button>
+                    <div ref={deleteButton!}>
+                        <Button
+                            theme="error"
+                            class={styles.button}
+                            onClick={() => setIsDeleting(true)}
+                        >
+                            {locale().UI.DeleteButton}
+                        </Button>
+                        <Popup>
+                            <div
+                                ref={confirmDeleteButton!}
+                                class={styles.deleteModal}
+                            >
+                                <Button
+                                    theme="error"
+                                    class={styles.button}
+                                    onClick={onDelete}
+                                >
+                                    {locale().UI.ConfirmDeleteButton}
+                                </Button>
+                            </div>
+                        </Popup>
+                    </div>
                     <Button
                         class={styles.button}
                         disabled={hasError()}
@@ -280,17 +312,6 @@ export const ProfileForm: Component = () => {
                     </Button>
                 </div>
             </Collapsable>
-            <Modal
-                visible={isDeleting()}
-                onClose={() => setIsDeleting(false)}
-                backdropDismiss
-            >
-                <div class={styles.deleteModal}>
-                    <Button theme="error" onClick={onDelete}>
-                        {locale().UI.DeleteButton}
-                    </Button>
-                </div>
-            </Modal>
         </>
     )
 }

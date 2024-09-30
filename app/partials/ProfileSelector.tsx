@@ -54,7 +54,7 @@ export const ProfileSelector: Component<{
                 <div
                     class={styles.profile}
                     // eslint-disable-next-line solid/reactivity
-                    onClick={() => createProfile().then((p) => onClick(p.id))}
+                    onClick={() => createProfile().then(() => onExpand(true))}
                 >
                     <IoAdd />
                 </div>

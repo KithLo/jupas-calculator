@@ -5,13 +5,13 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
+    height: 100%;
 }
 
 body,
 #root {
-    min-height: 100vh;
     min-width: 1024px;
+    height: 100%;
 }
 
 *::-webkit-scrollbar {
@@ -33,6 +33,7 @@ body,
 }
 
 #root:empty {
+    min-height: 0;
     height: 0;
 }
 

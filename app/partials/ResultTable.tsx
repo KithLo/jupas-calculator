@@ -180,7 +180,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
                     {" ("}
                     <ScoreValue
                         code={data.row.original.id}
-                        scores={data.row.original.scores}
+                        scores={data.row.original.lastYearScores}
                         withLastYear
                     >
                         {data.row.original.lastYearScore}

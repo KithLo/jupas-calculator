@@ -42,8 +42,8 @@ const Main: Component = () => {
 }
 
 const matchFilters = {
-    lang: /^en|tc$/,
-    year: /^latest$|^2\d{3}$/,
+    lang: /^(?:en|tc)$/,
+    year: /^(?:latest|2\d{3})$/,
 }
 
 export const App: Component = () => (

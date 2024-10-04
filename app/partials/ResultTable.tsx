@@ -22,7 +22,14 @@ import {
     toUint8Array as decodeBase64,
 } from "js-base64"
 import { pack, unpack } from "msgpackr"
-import { indexBy, mapObjIndexed, mergeDeepLeft, sum, values } from "rambda"
+import {
+    indexBy,
+    isEmpty,
+    mapObjIndexed,
+    mergeDeepLeft,
+    sum,
+    values,
+} from "rambda"
 import { IoCheckmarkCircle, IoCloseCircle } from "solid-icons/io"
 import { createMemo, For, Component, createRenderEffect, Show } from "solid-js"
 import { useThisYearData, useLocale, useLastYearData } from "../data"
@@ -78,13 +85,13 @@ function evaluate(scores?: SubjectScores | null): number | undefined {
 
 const statCell = (data: CellContext<ResultRow, unknown>) => {
     const key = data.column.id as "UQ" | "M" | "LQ"
-    const { statistics, deltas } = data.row.original
+    const { statistics, deltas, mode } = data.row.original
     const stat = statistics[key]
     const delta = deltas[key]
     if (stat === undefined) {
         return fallbackCellValue
     }
-    return <StatValue stat={stat} delta={delta} />
+    return <StatValue stat={stat} delta={delta} mode={mode} />
 }
 
 const arrayFilter: FilterFn<ResultRow> = (
@@ -192,7 +199,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
     },
     {
         header: () => (
-            <ResultTableHeaderCell labelKey="TableUQ" withLastYear>
+            <ResultTableHeaderCell labelKey="TableUQ">
                 <StatFilter titleKey="FilterUQ" />
             </ResultTableHeaderCell>
         ),
@@ -207,7 +214,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
     },
     {
         header: () => (
-            <ResultTableHeaderCell labelKey="TableM" withLastYear>
+            <ResultTableHeaderCell labelKey="TableM">
                 <StatFilter titleKey="FilterM" />
             </ResultTableHeaderCell>
         ),
@@ -222,7 +229,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
     },
     {
         header: () => (
-            <ResultTableHeaderCell labelKey="TableLQ" withLastYear>
+            <ResultTableHeaderCell labelKey="TableLQ">
                 <StatFilter titleKey="FilterLQ" />
             </ResultTableHeaderCell>
         ),
@@ -343,6 +350,7 @@ export const ResultTable: Component = () => {
                 scores: scores || undefined,
                 deltas: {},
                 statistics: row.statistics,
+                mode: "present",
             }
             const lastYearProgramme =
                 lastYearProgrammeMap?.[row.institution]?.[row.id]
@@ -361,11 +369,22 @@ export const ResultTable: Component = () => {
                     )
                     result.statistics = lastYearProgramme.statistics
                 }
-            } else if (score && row.maxScore) {
-                result.deltas = mapObjIndexed(
-                    (v) => ((v - score) / row.maxScore!) * 100,
-                    row.statistics,
-                )
+                result.mode = "last"
+            }
+            if (isEmpty(result.statistics) && score && row.maxScore) {
+                if (!isEmpty(row.statistics)) {
+                    result.deltas = mapObjIndexed(
+                        (v) => ((v - score) / row.maxScore!) * 100,
+                        row.statistics,
+                    )
+                } else if (!isEmpty(row.altStatistics)) {
+                    result.deltas = mapObjIndexed(
+                        (v) => ((v - score) / row.maxScore!) * 100,
+                        row.altStatistics,
+                    )
+                    result.statistics = row.altStatistics
+                    result.mode = "alt"
+                }
             }
             output[row.id] = result
         }

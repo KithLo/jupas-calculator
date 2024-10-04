@@ -21,19 +21,23 @@ export const StatDelta: Component<{ delta: number }> = (props) => {
     )
 }
 
-export const StatValue: Component<{ stat: number; delta?: number }> = (
-    props,
-) => {
+export const StatValue: Component<{
+    stat: number
+    delta?: number
+    mode: ResultScoredRow["mode"]
+}> = (props) => {
     return (
         <>
             {round(props.stat)}
-            <Show when={props.delta}>
-                {(delta) => (
-                    <>
-                        {" "}
-                        <StatDelta delta={delta()} />
-                    </>
-                )}
+            <Show when={props.mode === "alt"}>
+                <span class={styles.remark}>^</span>
+            </Show>
+            <Show when={props.mode === "last"}>
+                <span class={styles.remark}>#</span>
+            </Show>
+            <Show when={props.delta != null}>
+                {" "}
+                <StatDelta delta={props.delta!} />
             </Show>
         </>
     )

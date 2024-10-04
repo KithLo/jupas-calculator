@@ -3,3 +3,9 @@
     border-radius: 8px;
     line-height: 20px;
 }
+
+.remark {
+    vertical-align: top;
+    font-size: 12px;
+    user-select: none;
+}

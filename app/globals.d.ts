@@ -44,6 +44,11 @@ declare global {
             M?: number
             LQ?: number
         }
+        altStatistics: {
+            UQ?: number
+            M?: number
+            LQ?: number
+        }
     }
 
     interface Locale {
@@ -83,6 +88,7 @@ declare global {
             LQ?: number
         }
         statistics: Programme["statistics"]
+        mode: "last" | "present" | "alt"
     }
 
     interface ResultRow extends ResultRawRow, ResultNamedRow, ResultScoredRow {}

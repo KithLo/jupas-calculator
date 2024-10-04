@@ -479,13 +479,12 @@ export const ResultTable: Component = () => {
     })
 
     createRenderEffect(() => {
-        const statData = data().hasStats ? data() : lastYearData()
-        const programmes = Object.values(statData?.programmes || {}).flat()
+        const scores = Object.values(scoredRows() || {})
         table.setColumnVisibility((state) => ({
             ...state,
-            UQ: !!statData && programmes.some((p) => p.statistics.UQ),
-            M: !!statData && programmes.some((p) => p.statistics.M),
-            LQ: !!statData && programmes.some((p) => p.statistics.LQ),
+            UQ: scores.some((p) => p.statistics.UQ),
+            M: scores.some((p) => p.statistics.M),
+            LQ: scores.some((p) => p.statistics.LQ),
         }))
     })
 

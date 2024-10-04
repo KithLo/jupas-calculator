@@ -371,17 +371,21 @@ export const ResultTable: Component = () => {
                 }
                 result.mode = "last"
             }
-            if (isEmpty(result.statistics) && score && row.maxScore) {
+            if (isEmpty(result.statistics) && row.maxScore) {
                 if (!isEmpty(row.statistics)) {
-                    result.deltas = mapObjIndexed(
-                        (v) => ((v - score) / row.maxScore!) * 100,
-                        row.statistics,
-                    )
+                    if (score) {
+                        result.deltas = mapObjIndexed(
+                            (v) => ((v - score) / row.maxScore!) * 100,
+                            row.statistics,
+                        )
+                    }
                 } else if (!isEmpty(row.altStatistics)) {
-                    result.deltas = mapObjIndexed(
-                        (v) => ((v - score) / row.maxScore!) * 100,
-                        row.altStatistics,
-                    )
+                    if (score) {
+                        result.deltas = mapObjIndexed(
+                            (v) => ((v - score) / row.maxScore!) * 100,
+                            row.altStatistics,
+                        )
+                    }
                     result.statistics = row.altStatistics
                     result.mode = "alt"
                 }

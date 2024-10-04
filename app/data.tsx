@@ -84,17 +84,10 @@ export const DataProvider: ParentComponent = (props) => {
     const location = useLocation()
     const params = usePathParams()
     const [thisYearData] = createResource(() => params.year, loadData)
-    const [lastYearData] = createResource(
-        () => {
-            const data = thisYearData()
-            return data && !data.hasStats ? data.lastYear : null
-        },
-        async (year) => {
-            const result = await loadData(year)
-            if (!result.hasStats) return undefined
-            return result
-        },
-    )
+    const [lastYearData] = createResource(() => {
+        const data = thisYearData()
+        return data && !data.hasStats ? data.lastYear : null
+    }, loadData)
     const [locale] = createResource(
         () => [params.year, params.lang] as const,
         ([year, lang]) =>

@@ -3,6 +3,7 @@ import clsx from "clsx"
 import { Component } from "solid-js"
 import { DataProvider } from "./data"
 import { Home } from "./Home"
+import { Footer } from "./partials/Footer"
 import { Header } from "./partials/Header"
 import { ProfileProvider } from "./profile"
 import { SettingsProvider, useSettings } from "./settings"
@@ -22,6 +23,7 @@ const Content: Component = () => {
             <div class={styles.content}>
                 <Home />
             </div>
+            <Footer />
             <div id="portal" />
         </div>
     )

@@ -177,9 +177,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
             ),
     },
     {
-        header: () => (
-            <ResultTableHeaderCell labelKey="TableScore" withLastYear />
-        ),
+        header: () => <ResultTableHeaderCell labelKey="TableScore" />,
         id: "score",
         enableSorting: false,
         enableColumnFilter: false,

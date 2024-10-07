@@ -14,7 +14,7 @@ import { TableColumnProvider } from "../table"
 import { ListFilter } from "./ListFilter"
 import styles from "./Pagination.module.css"
 
-const pageSizeOptions = [10, 20, 50, 100]
+const pageSizeOptions = [10, 20, 50, 100, 500]
 
 export const Pagination: Component<{
     table: Table<ResultRow>

@@ -86,13 +86,20 @@ function evaluate(scores?: SubjectScores | null): number | undefined {
 
 const statCell = (data: CellContext<ResultRow, unknown>) => {
     const key = data.column.id as "UQ" | "M" | "LQ"
-    const { statistics, deltas, mode } = data.row.original
+    const { statistics, deltas, mode, lastYearId, id } = data.row.original
     const stat = statistics[key]
     const delta = deltas[key]
     if (stat === undefined) {
         return fallbackCellValue
     }
-    return <StatValue stat={stat} delta={delta} mode={mode} />
+    return (
+        <StatValue
+            stat={stat}
+            delta={delta}
+            mode={mode}
+            lastYearId={id === lastYearId ? undefined : lastYearId}
+        />
+    )
 }
 
 const arrayFilter: FilterFn<ResultRow> = (
@@ -188,7 +195,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
                 <Show when={data.row.original.lastYearScore}>
                     {" ("}
                     <ScoreValue
-                        code={data.row.original.id}
+                        code={data.row.original.lastYearId!}
                         scores={data.row.original.lastYearScores}
                         withLastYear
                     >
@@ -355,12 +362,14 @@ export const ResultTable: Component = () => {
                 mode: "present",
             }
             const lastYearProgramme =
-                lastYearProgrammeMap?.[row.institution]?.[row.id]
+                lastYearProgrammeMap?.[row.institution]?.[row.id] ||
+                lastYearProgrammeMap?.[row.institution]?.[row.reference || ""]
             if (lastYearProgramme) {
                 const grade = lastYearProgramme.mapGrades(subjects)
                 const pass = lastYearProgramme.requirement(grade)
                 const scores = pass ? lastYearProgramme.weighting(grade) : null
                 const score = evaluate(scores)
+                result.lastYearId = lastYearProgramme.id
                 result.lastYearScore = (score && round(score)) || undefined
                 result.lastYearScores = scores || undefined
                 if (score && lastYearProgramme.maxScore) {

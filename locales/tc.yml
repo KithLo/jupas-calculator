@@ -25,3 +25,4 @@ UI:
   FilterLQ: Lower Quartile
   RemarkLastStat: 使用去年的統計數據。
   RemarkAltStat: 使用去年的統計數據，但採用今年的計分方法。
+  Reference: "使用 {} 的數據"

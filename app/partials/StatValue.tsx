@@ -1,4 +1,6 @@
 import { Component, Show } from "solid-js"
+import { Tooltip } from "../components/Tooltip"
+import { useLocale } from "../data"
 import { useSettings } from "../settings"
 import { getStatColor, round } from "../util"
 import styles from "./StatValue.module.css"
@@ -25,10 +27,21 @@ export const StatValue: Component<{
     stat: number
     delta?: number
     mode: ResultScoredRow["mode"]
+    lastYearId?: string
 }> = (props) => {
+    const locale = useLocale()
     return (
         <>
-            {round(props.stat)}
+            <Show when={props.lastYearId} fallback={round(props.stat)}>
+                <Tooltip
+                    text={locale().UI.Reference?.replace(
+                        "{}",
+                        props.lastYearId!,
+                    )}
+                >
+                    {round(props.stat)}
+                </Tooltip>
+            </Show>
             <Show when={props.mode === "alt"}>
                 <span class={styles.remark}>^</span>
             </Show>

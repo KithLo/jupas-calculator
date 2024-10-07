@@ -25,3 +25,4 @@ UI:
   FilterLQ: Lower Quartile
   RemarkLastStat: Using last year's statistics.
   RemarkAltStat: Using last year's statistics with this year's scoring method.
+  Reference: "Using statistics from {}"

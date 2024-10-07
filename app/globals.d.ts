@@ -49,6 +49,7 @@ declare global {
             M?: number
             LQ?: number
         }
+        reference?: string
     }
 
     interface Locale {
@@ -80,6 +81,7 @@ declare global {
         pass: boolean
         score?: string
         scores?: Record<string, number>
+        lastYearId?: string
         lastYearScore?: string
         lastYearScores?: Record<string, number>
         isCombinedScore?: boolean

@@ -23,6 +23,7 @@ import {
 } from "js-base64"
 import { pack, unpack } from "msgpackr"
 import {
+    equals,
     indexBy,
     isEmpty,
     mapObjIndexed,
@@ -180,6 +181,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
                 <ScoreValue
                     code={data.row.original.id}
                     scores={data.row.original.scores}
+                    isCombinedScore={data.row.original.isCombinedScore}
                 >
                     {data.row.original.score}
                 </ScoreValue>
@@ -367,9 +369,18 @@ export const ResultTable: Component = () => {
                             ((v - score) / lastYearProgramme.maxScore!) * 100,
                         lastYearProgramme.statistics,
                     )
-                    result.statistics = lastYearProgramme.statistics
                 }
+                result.statistics = lastYearProgramme.statistics
                 result.mode = "last"
+
+                if (
+                    result.lastYearScore === result.score &&
+                    equals(result.lastYearScores, result.scores)
+                ) {
+                    result.lastYearScore = undefined
+                    result.lastYearScores = undefined
+                    result.isCombinedScore = true
+                }
             }
             if (isEmpty(result.statistics) && row.maxScore) {
                 if (!isEmpty(row.statistics)) {

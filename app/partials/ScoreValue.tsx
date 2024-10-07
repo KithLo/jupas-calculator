@@ -9,6 +9,7 @@ import styles from "./ScoreValue.module.css"
 const ScoreFormula: ParentComponent<{
     code: string
     withLastYear?: boolean
+    isCombinedScore?: boolean
     scores: SubjectScores
 }> = (props) => {
     const locale = useLocale()
@@ -24,11 +25,19 @@ const ScoreFormula: ParentComponent<{
                 score: props.scores[subject]!,
             })),
     )
+
+    const year = createMemo(() => {
+        const thisYear = data().year
+        if (!props.withLastYear && !props.isCombinedScore) return thisYear
+        const lastYear = lastYearData()?.year
+        if (!lastYear) return thisYear
+        return props.isCombinedScore ? `${thisYear} / ${lastYear}` : lastYear
+    })
+
     return (
         <div class={styles.formula}>
             <div class={styles.formulaCode}>
-                {props.code} (
-                {(props.withLastYear && lastYearData()?.year) || data().year})
+                {props.code} ({year()})
             </div>
             <For each={rows()}>
                 {(item) => (
@@ -50,6 +59,7 @@ export const ScoreValue: ParentComponent<{
     code: string
     scores?: SubjectScores
     withLastYear?: boolean
+    isCombinedScore?: boolean
 }> = (props) => {
     return (
         <Show when={!!props.scores} fallback={props.children}>
@@ -59,6 +69,7 @@ export const ScoreValue: ParentComponent<{
                         code={props.code}
                         scores={props.scores!}
                         withLastYear={props.withLastYear}
+                        isCombinedScore={props.isCombinedScore}
                         children={props.children}
                     />
                 }

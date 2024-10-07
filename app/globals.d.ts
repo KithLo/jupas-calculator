@@ -82,11 +82,8 @@ declare global {
         scores?: Record<string, number>
         lastYearScore?: string
         lastYearScores?: Record<string, number>
-        deltas: {
-            UQ?: number
-            M?: number
-            LQ?: number
-        }
+        isCombinedScore?: boolean
+        deltas: Programme["statistics"]
         statistics: Programme["statistics"]
         mode: "last" | "present" | "alt"
     }

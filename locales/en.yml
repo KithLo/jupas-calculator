@@ -19,6 +19,7 @@ UI:
   StudyAreasSelected: "{} study areas selected"
   PageSize: "Page size:"
   PassFilter: Show only eligible programmes
+  StatFilterexcludeNil: Show only programmes with data
   FilterSelect: Select
   FilterUQ: Upper Quartile
   FilterM: Median / Mean

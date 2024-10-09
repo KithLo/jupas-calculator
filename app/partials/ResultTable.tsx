@@ -113,6 +113,31 @@ const arrayFilter: FilterFn<ResultRow> = (
 
 arrayFilter.autoRemove = (val: any) => !val || !val?.length
 
+const statFilter: FilterFn<ResultRow> = (row, columnId, filterValue) => {
+    const [min, max, excludeNil] = filterValue
+    const rowValue = row.getValue(columnId) as number
+    return rowValue == null ? !excludeNil : rowValue >= min && rowValue <= max
+}
+statFilter.resolveFilterValue = (val) => {
+    const [unsafeMin, unsafeMax, excludeNil] = val
+    const parsedMin =
+        typeof unsafeMin !== "number" ? parseFloat(unsafeMin) : unsafeMin
+    const parsedMax =
+        typeof unsafeMax !== "number" ? parseFloat(unsafeMax) : unsafeMax
+    let min =
+        unsafeMin == null || Number.isNaN(parsedMin) ? -Infinity : parsedMin
+    let max =
+        unsafeMax == null || Number.isNaN(parsedMax) ? Infinity : parsedMax
+    if (min > max) {
+        const temp = min
+        min = max
+        max = temp
+    }
+    return [min, max, !!excludeNil]
+}
+statFilter.autoRemove = (val) =>
+    !val || (val[0] == null && val[1] == null && !val[2])
+
 const columnDefs: ColumnDef<ResultRow>[] = [
     {
         header: () => (
@@ -217,7 +242,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
         cell: statCell,
         sortDescFirst: false,
         sortUndefined: "last",
-        filterFn: "inNumberRange",
+        filterFn: statFilter,
     },
     {
         header: () => (
@@ -232,7 +257,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
         cell: statCell,
         sortDescFirst: false,
         sortUndefined: "last",
-        filterFn: "inNumberRange",
+        filterFn: statFilter,
     },
     {
         header: () => (
@@ -246,7 +271,7 @@ const columnDefs: ColumnDef<ResultRow>[] = [
         cell: statCell,
         sortDescFirst: false,
         sortUndefined: "last",
-        filterFn: "inNumberRange",
+        filterFn: statFilter,
     },
     {
         accessorKey: "studyAreas",

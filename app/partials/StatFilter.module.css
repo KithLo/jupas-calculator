@@ -52,3 +52,11 @@
 .compare {
     font-size: 14px;
 }
+
+.excludeNil {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    cursor: pointer;
+    margin: 20px 0;
+}

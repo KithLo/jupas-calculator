@@ -19,6 +19,7 @@ UI:
   StudyAreasSelected: "已選 {} 學習範疇"
   PageSize: 每頁顯示：
   PassFilter: 僅顯示符合條件的課程
+  StatFilterexcludeNil: 僅顯示有數據的課程
   FilterSelect: 選取
   FilterUQ: Upper Quartile
   FilterM: Median / Mean

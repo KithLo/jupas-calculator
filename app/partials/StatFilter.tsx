@@ -12,6 +12,7 @@ import {
     createSignal,
 } from "solid-js"
 import { Button } from "../components/Button"
+import { Toggle } from "../components/Toggle"
 import { useLocale } from "../data"
 import { useSettings } from "../settings"
 import { useTableColumn } from "../table"
@@ -144,6 +145,7 @@ export const StatFilter: ParentComponent<{
 
     const [value1, setValue1] = createSignal(minValue)
     const [value2, setValue2] = createSignal(maxValue)
+    const [excludeNil, setexcludeNil] = createSignal(false)
 
     const onClick = () => {
         batch(() => {
@@ -158,6 +160,7 @@ export const StatFilter: ParentComponent<{
     const onReset = () => {
         setValue1(minValue)
         setValue2(maxValue)
+        setexcludeNil(false)
     }
 
     const onConfirm = () => {
@@ -173,9 +176,7 @@ export const StatFilter: ParentComponent<{
                 vals[1] = undefined
             }
         }
-        column().setFilterValue(
-            vals[0] === undefined && vals[1] === undefined ? undefined : vals,
-        )
+        column().setFilterValue([...vals, excludeNil()])
         setFocus(false)
     }
 
@@ -234,6 +235,13 @@ export const StatFilter: ParentComponent<{
                 onValue1Change={setValue1}
                 onValue2Change={setValue2}
             />
+            <div
+                class={styles.excludeNil}
+                onClick={() => setexcludeNil((x) => !x)}
+            >
+                <Toggle value={excludeNil()} />
+                <div>{locale().UI.StatFilterexcludeNil}</div>
+            </div>
             <div class={styles.buttons}>
                 <Button kind="outline" onClick={onReset}>
                     {locale().UI.ResetButton}

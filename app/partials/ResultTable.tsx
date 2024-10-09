@@ -313,18 +313,16 @@ export const ResultTable: Component = () => {
         const data = lastYearData()
         if (!data) return null
         const maxGrade = data.maxGrade
-        return mapObjIndexed(
-            (list) =>
-                indexBy(
-                    (programme) => programme.id,
-                    list.map((programme) => ({
-                        ...programme,
-                        maxScore: evaluate(
-                            programme.weighting(programme.mapGrades(maxGrade)),
-                        ),
-                    })),
-                ),
-            data.programmes,
+        return indexBy(
+            (programme) => programme.id,
+            Object.values(data.programmes)
+                .flat()
+                .map((programme) => ({
+                    ...programme,
+                    maxScore: evaluate(
+                        programme.weighting(programme.mapGrades(maxGrade)),
+                    ),
+                })),
         )
     })
 
@@ -360,8 +358,8 @@ export const ResultTable: Component = () => {
                 mode: "present",
             }
             const lastYearProgramme =
-                lastYearProgrammeMap?.[row.institution]?.[row.id] ||
-                lastYearProgrammeMap?.[row.institution]?.[row.reference || ""]
+                lastYearProgrammeMap?.[row.id] ||
+                lastYearProgrammeMap?.[row.reference || ""]
             if (lastYearProgramme) {
                 const grade = lastYearProgramme.mapGrades(subjects)
                 const pass = lastYearProgramme.requirement(grade)
